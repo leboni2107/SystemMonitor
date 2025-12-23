@@ -2,6 +2,9 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"os/exec"
+	"runtime"
 	"time"
 
 	"github.com/shirou/gopsutil/v4/cpu"
@@ -33,6 +36,18 @@ func getData() (*disk.UsageStat, []cpu.InfoStat, []float64, *mem.VirtualMemorySt
 	return diskUsage, cpuInfo, cpuPercent, memoryInfo, nil
 }
 
+func ClearScreen() {
+	if runtime.GOOS == "windows" {
+		cmd := exec.Command("cmd", "/c", "cls")
+		cmd.Stdout = os.Stdout
+		cmd.Run()
+	} else {
+		cmd := exec.Command("clear")
+		cmd.Stdout = os.Stdout
+		cmd.Run()
+	}
+}
+
 func print(diskUsage *disk.UsageStat, cpuInfo []cpu.InfoStat, cpuPercent []float64, memoryInfo *mem.VirtualMemoryStat, err error) {
 	if err != nil {
 		fmt.Println(err)
@@ -44,11 +59,15 @@ func print(diskUsage *disk.UsageStat, cpuInfo []cpu.InfoStat, cpuPercent []float
 	fmt.Printf("Disk Used: %.2f%%\n", diskUsage.UsedPercent)
 	fmt.Printf("Memory Used: %.2f%%\n", memoryInfo.UsedPercent)
 
-	// Wait 2 seconds before next update
 	time.Sleep(2 * time.Second)
 }
 
 func main() {
-	diskUsage, cpuInfo, cpuPercent, memoryInfo, err := getData()
-	print(diskUsage, cpuInfo, cpuPercent, memoryInfo, err)
+
+	for {
+		ClearScreen()
+		diskUsage, cpuInfo, cpuPercent, memoryInfo, err := getData()
+		print(diskUsage, cpuInfo, cpuPercent, memoryInfo, err)
+	}
+
 }
