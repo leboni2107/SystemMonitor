@@ -12,6 +12,18 @@ import (
 	"github.com/shirou/gopsutil/v4/mem"
 )
 
+const (
+	Reset   = "\033[0m"
+	Red     = "\033[31m"
+	Green   = "\033[32m"
+	Yellow  = "\033[33m"
+	Blue    = "\033[34m"
+	Magenta = "\033[35m"
+	Cyan    = "\033[36m"
+	White   = "\033[37m"
+	Bold    = "\033[1m"
+)
+
 func getData() (*disk.UsageStat, []cpu.InfoStat, []float64, *mem.VirtualMemoryStat, error) {
 	diskUsage, err := disk.Usage("/")
 	if err != nil {
@@ -53,7 +65,9 @@ func print(diskUsage *disk.UsageStat, cpuInfo []cpu.InfoStat, cpuPercent []float
 		fmt.Println(err)
 	}
 
-	fmt.Println("┏━━━━━━━━━━━━━━━━━━━━━━━━┓\n┃      System Monitor    ┃\n┣━━━━━━━━━━━━━━━━━━━━━━━━┫\n")
+	fmt.Println("┏━━━━━━━━━━━━━━━━━━━━━━━━┓")
+	fmt.Println("┃      System Monitor    ┃")
+	fmt.Println("┣━━━━━━━━━━━━━━━━━━━━━━━━┫")
 
 	fmt.Printf("\033[4;0H")
 	fmt.Println("┃ CPU Model:", cpuInfo[0].ModelName)
