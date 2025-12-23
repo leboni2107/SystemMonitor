@@ -70,7 +70,7 @@ func print(diskUsage *disk.UsageStat, cpuInfo []cpu.InfoStat, cpuPercent []float
 	fmt.Printf("┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫\n")
 
 	fmt.Printf("\033[4;0H")
-	fmt.Printf("┃ %sCPU Model:%s %s", Blue, Reset, cpuInfo[0].ModelName)
+	fmt.Printf("┃ %sCPU Model:  %s %s", Blue, Reset, cpuInfo[0].ModelName)
 	fmt.Printf("\033[4;36H")
 	fmt.Printf("┃\n")
 
@@ -82,7 +82,7 @@ func print(diskUsage *disk.UsageStat, cpuInfo []cpu.InfoStat, cpuPercent []float
 	fmt.Printf("┃\n")
 
 	fmt.Printf("\033[6;0H")
-	fmt.Printf("┃ Disk Used:   ")
+	fmt.Printf("┃ %sDisk Used:%s   ", Green, Reset)
 	printBar(int(diskUsage.UsedPercent))
 	fmt.Printf(" [%.2f%%]", diskUsage.UsedPercent)
 	fmt.Printf("\033[6;36H")
