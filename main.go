@@ -66,7 +66,7 @@ func print(diskUsage *disk.UsageStat, cpuInfo []cpu.InfoStat, cpuPercent []float
 	}
 
 	fmt.Println("┏━━━━━━━━━━━━━━━━━━━━━━━━┓")
-	fmt.Println("┃      System Monitor    ┃")
+	fmt.Println("┃   ", Blue, "System Monitor", Reset, "   ┃")
 	fmt.Println("┣━━━━━━━━━━━━━━━━━━━━━━━━┫")
 
 	fmt.Printf("\033[4;0H")
