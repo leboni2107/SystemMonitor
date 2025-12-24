@@ -27,7 +27,7 @@ const (
 	Blue        = "\033[34m"
 	Magenta     = "\033[35m"
 	Cyan        = "\033[36m"
-	White       = "\033[37m"
+	Grey        = "\033[37m"
 	ScreenWidth = 36
 ) // ANSI Formatting
 
@@ -159,7 +159,7 @@ func PrintMainMenu(diskUsage *disk.UsageStat, cpuInfo []cpu.InfoStat, cpuPercent
 	fmt.Printf("\033[%d;0H", 11+padding)
 }
 
-func PrintNetMenu(netInfo []net.IOCountersStat, err error) {
+func PrintNetMenu(netInfo []net.IOCountersStat, selection int, err error) {
 	/*
 	 * Arrow <- -> to cycle through netInfo Elements (Name, Packets sent, recv...)
 	 */
@@ -180,6 +180,27 @@ func PrintNetMenu(netInfo []net.IOCountersStat, err error) {
 	PrintValue(connectionsLine, 4, ScreenWidth+10, ScreenWidth)
 	PrintValue("┃", 4, ScreenWidth+9+ScreenWidth, ScreenWidth)
 
+	selectionLine := fmt.Sprintf("┃ %s%sSelection:%s   [%d] [<- / ->]", Grey, Bold, Reset, selection)
+	PrintValue(selectionLine, 5, ScreenWidth+10, ScreenWidth)
+	PrintValue("┃", 5, ScreenWidth+9+ScreenWidth, ScreenWidth)
+
+	header4 := fmt.Sprintf("┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫\n")
+	PrintValue(header4, 6, ScreenWidth+10, ScreenWidth)
+
+	nameLine := fmt.Sprintf("┃ %s%sName:%s        [%s]", Magenta, Bold, Reset, netInfo[selection].Name)
+	PrintValue(nameLine, 7, ScreenWidth+10, ScreenWidth)
+	PrintValue("┃", 7, ScreenWidth+9+ScreenWidth, ScreenWidth)
+
+	packetsRecvLine := fmt.Sprintf("┃ %s%sReceived:%s    [%d]", Cyan, Bold, Reset, netInfo[selection].PacketsRecv)
+	PrintValue(packetsRecvLine, 8, ScreenWidth+10, ScreenWidth)
+	PrintValue("┃", 8, ScreenWidth+9+ScreenWidth, ScreenWidth)
+
+	packetsSentLine := fmt.Sprintf("┃ %s%sSent:%s        [%d]", Cyan, Bold, Reset, netInfo[selection].PacketsSent)
+	PrintValue(packetsSentLine, 9, ScreenWidth+10, ScreenWidth)
+	PrintValue("┃", 9, ScreenWidth+9+ScreenWidth, ScreenWidth)
+
+	header5 := fmt.Sprintf("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛")
+	PrintValue(header5, 10, ScreenWidth+10, ScreenWidth)
 }
 
 func GetProgressBar(progress int, base int) string {
@@ -211,7 +232,7 @@ func main() {
 
 		ClearScreen()
 		PrintMainMenu(diskUsage, cpuInfo, cpuPercent, memoryInfo, netInfo, temperatureInfo, err, float64(BytesRecvDelta))
-		PrintNetMenu(netInfo, err)
+		PrintNetMenu(netInfo, 0, err)
 
 		time.Sleep(1000 * time.Millisecond)
 	}
