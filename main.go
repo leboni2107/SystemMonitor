@@ -126,11 +126,11 @@ func PrintMenu(diskUsage *disk.UsageStat, cpuInfo []cpu.InfoStat, cpuPercent []f
 	cpuLine := fmt.Sprintf("┃ %s%sCPU Used:%s    %s [%.2f%%]", Blue, Bold, Reset, GetProgressBar(int(cpuPercent[0]), 10), cpuPercent[0])
 	printValue(cpuLine, 5+padding, 0, ScreenWidth)
 
-	diskLine := fmt.Sprintf("┃ %s%sDisk Used:%s   %s [%.2f%%]", Green, Bold, Reset, GetProgressBar(int(diskUsage.UsedPercent), 10), diskUsage.UsedPercent)
-	printValue(diskLine, 6+padding, 0, ScreenWidth)
-
 	memLine := fmt.Sprintf("┃ %s%sMemory Used:%s %s [%.2f%%]", Yellow, Bold, Reset, GetProgressBar(int(memoryInfo.UsedPercent), 10), memoryInfo.UsedPercent)
 	printValue(memLine, 7+padding, 0, ScreenWidth)
+
+	diskLine := fmt.Sprintf("┃ %s%sDisk Used:%s   %s [%.2f%%]", Green, Bold, Reset, GetProgressBar(int(diskUsage.UsedPercent), 10), diskUsage.UsedPercent)
+	printValue(diskLine, 6+padding, 0, ScreenWidth)
 
 	tempLine := fmt.Sprintf("┃ %s%sTemps:%s       [%.2f°C]", Red, Bold, Reset, tempInfo[0].Temperature)
 	printValue(tempLine, 8+padding, 0, ScreenWidth)
@@ -143,9 +143,12 @@ func PrintMenu(diskUsage *disk.UsageStat, cpuInfo []cpu.InfoStat, cpuPercent []f
 	netLine := fmt.Sprintf("┃ %s%sNetwork:%s     [%.2f%s]", Magenta, Bold, Reset, BytesRecvDelta, prefixes[i])
 	printValue(netLine, 9+padding, 0, ScreenWidth)
 
-	fmt.Printf("\033[%d;0H", 10+padding)
+	netLine2 := fmt.Sprintf("┃ %s%sConnections:%s [%d]", Magenta, Bold, Reset, len(netInfo))
+	printValue(netLine2, 10+padding, 0, ScreenWidth)
+
+	fmt.Printf("\033[%d;0H", 11+padding)
 	fmt.Printf("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛\n")
-	fmt.Printf("\033[%d;0H", 10+padding)
+	fmt.Printf("\033[%d;0H", 12+padding)
 }
 
 func GetProgressBar(progress int, base int) string {
@@ -167,6 +170,7 @@ func GetProgressBar(progress int, base int) string {
 func main() {
 	/*
 	 * TODO: Net Graph 0-Max
+	 * TODO: Parallel Network Menu
 	 */
 	diskUsage, cpuInfo, cpuPercent, memoryInfo, netInfo, temperatureInfo, err := GetData()
 	for {
